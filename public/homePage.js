@@ -22,7 +22,8 @@ let requestCourse = () => ApiConnector.getStocks(response => {
   }
 });
 
-setInterval(requestCourse(), 60000);
+requestCourse();
+setInterval(requestCourse, 60000);
 
 /* Операции с деньгами */
 const moneyManager = new MoneyManager();
@@ -32,10 +33,8 @@ moneyManager.addMoneyCallback = (data) => {
   ApiConnector.addMoney(data, response => {
     if (response.success) {
       ProfileWidget.showProfile(response.data);
-      moneyManager.setMessage(response.success, `Выполнено успешно!`);
-    } else {
-      moneyManager.setMessage(response.false, `Ошибка!`);
     }
+    moneyManager.setMessage(response.success, response.error || `Выполнено успешно!`);
   })
 }
 
@@ -44,10 +43,8 @@ moneyManager.conversionMoneyCallback = (data) => {
   ApiConnector.convertMoney(data, response => {
     if (response.success) {
       ProfileWidget.showProfile(response.data);
-      moneyManager.setMessage(response.success, `Выполнено успешно!`);
-    } else {
-      moneyManager.setMessage(response.false, `Ошибка!`);
     }
+    moneyManager.setMessage(response.success, response.error || `Выполнено успешно!`);
   })
 }
 
@@ -56,10 +53,8 @@ moneyManager.sendMoneyCallback = (data) => {
   ApiConnector.transferMoney(data, response => {
     if (response.success) {
       ProfileWidget.showProfile(response.data);
-      moneyManager.setMessage(response.success, `Выполнено успешно!`);
-    } else {
-      moneyManager.setMessage(response.false, `Ошибка!`);
     }
+    moneyManager.setMessage(response.success, response.error || `Выполнено успешно!`);
   })
 }
 
@@ -82,10 +77,8 @@ favoritesWidget.addUserCallback = (data) => {
       favoritesWidget.clearTable();
       favoritesWidget.fillTable(response.data);
       moneyManager.updateUsersList(response.data);
-      favoritesWidget.setMessage(response.success, `Пользователь добавлен!`);
-    } else {
-      favoritesWidget.setMessage(response.false, `Не удалось добавить пользователя!`);
     }
+    favoritesWidget.setMessage(response.success, response.error || "Пользователь добавлен!");
   })
 }
 
@@ -96,9 +89,7 @@ favoritesWidget.removeUserCallback = (data) => {
       favoritesWidget.clearTable();
       favoritesWidget.fillTable(response.data);
       moneyManager.updateUsersList(response.data);
-      favoritesWidget.setMessage(response.success, `Пользователь удален!`);
-    } else {
-      favoritesWidget.setMessage(response.false, `Не удалось удалить пользователя!`);
     }
+    favoritesWidget.setMessage(response.success, response.error || `Пользователь удален!`);
   })
 }
